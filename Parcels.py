@@ -2,10 +2,9 @@ class Parcels:
     def __init__(self, parcels, speedy_shipping=False):
         self.parcels = parcels
         self.speedy_shipping = speedy_shipping
-        self.delivery_costs = {'small': 3, 'medium': 8, 'large': 15, 'xl': 25}
-        self.weight_limits = {'small': 1, 'medium': 3, 'large': 6, 'xl': 10}
-        self.weight_charges = 2
-
+        self.delivery_costs = {'small': 3, 'medium': 8, 'large': 15, 'xl': 25, 'heavy': 50}
+        self.weight_limits = {'small': 1, 'medium': 3, 'large': 6, 'xl': 10, 'heavy': float('inf')}
+        self.weight_charges = {'small': 2, 'medium': 2, 'large': 2, 'xl': 2, 'heavy': 1}
 
     def calculate_size_cost(self, parcel):
         size = None
@@ -23,7 +22,10 @@ class Parcels:
         weight = parcel['weight']
         weight_limit = self.weight_limits[size]
         if weight > weight_limit:
-            weight_charge = (weight - weight_limit) * self.weight_charges
+            weight_charge = (weight - weight_limit) * self.weight_charges[size]
+            size_cost = self.delivery_costs[size] + weight_charge
+        elif size == 'heavy' and weight > 50:
+            weight_charge = (weight - 50) * self.weight_charges[size]
             size_cost = self.delivery_costs[size] + weight_charge
         else:
             size_cost = self.delivery_costs[size]
