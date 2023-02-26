@@ -3,16 +3,32 @@ class Parcels:
         self.parcels = parcels
         self.speedy_shipping = speedy_shipping
         self.delivery_costs = {'small': 3, 'medium': 8, 'large': 15, 'xl': 25}
+        self.weight_limits = {'small': 1, 'medium': 3, 'large': 6, 'xl': 10}
+        self.weight_charges = 2
+
 
     def calculate_size_cost(self, parcel):
-        if all(dim < 10 for dim in parcel.values()):
-            return self.delivery_costs['small']
-        elif all(dim < 50 for dim in parcel.values()):
-            return self.delivery_costs['medium']
-        elif all(dim < 100 for dim in parcel.values()):
-            return self.delivery_costs['large']
+        size = None
+        for dim in parcel.values():
+            if dim >= 200:
+                size = 'xl'
+                break
+            elif dim >= 100:
+                size = 'large'
+            elif dim >= 50:
+                size = 'medium'
+            else:
+                size = 'small'
+
+        weight = parcel['weight']
+        weight_limit = self.weight_limits[size]
+        if weight > weight_limit:
+            weight_charge = (weight - weight_limit) * self.weight_charges
+            size_cost = self.delivery_costs[size] + weight_charge
         else:
-            return self.delivery_costs['xl']
+            size_cost = self.delivery_costs[size]
+        
+        return size_cost
 
     def calculate_cost(self):
         total_cost = 0
