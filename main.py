@@ -7,7 +7,18 @@ parcels_list = [
     {'length': 200, 'width': 150, 'height': 100, 'weight': 50}
     ]
 
+#Implementation step 1
+
 parcels_obj = Parcels(parcels_list)
+results = parcels_obj.calculate_cost()
+print("Total cost of parcels:", results['total_cost'])
+print("Items:")
+for item in results['items']:
+     print(item)
+
+#Implementation step 2
+
+parcels_obj = Parcels(parcels_list,speedy_shipping=True)
 results = parcels_obj.calculate_cost()
 print("Total cost of parcels:", results['total_cost'])
 print("Items:")
